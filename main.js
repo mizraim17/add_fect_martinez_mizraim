@@ -4,7 +4,7 @@
 
 let containerCharacters;
 
-const suspectsArray = [
+const suspectsArray2 = [
 	{ id: 0, name: "Michael Scott", name_image: "michael" },
 	{ id: 1, name: "Jim Halpert", name_image: "jim" },
 	{ id: 2, name: "Dwight Schrute", name_image: "dwight" },
@@ -37,17 +37,20 @@ let doRandom = (arrSearch) =>
 	Math.round(Math.random() * (arrSearch.length - 1));
 
 //Generate array without person die because he dont cant be the murder
-let listWithoutMurder = (nameDiedPerson) => {
+let listWithoutMurder = (nameDiedPerson, suspectsArray) => {
 	newList = suspectsArray.filter((item) => item.name !== nameDiedPerson);
 	return newList;
 };
 
 //Generate array only with assasin and person died
 
-let genereAssesinMurder = () => {
+let genereAssesinMurder = (suspectsArray) => {
 	let arrayAssesinDied = [],
 		numDiedPerson = parseInt(doRandom(suspectsArray)),
-		listNoMurdered = listWithoutMurder(suspectsArray[numDiedPerson].name);
+		listNoMurdered = listWithoutMurder(
+			suspectsArray[numDiedPerson].name,
+			suspectsArray
+		);
 
 	[arrayAssesinDied[0], arrayAssesinDied[1]] = [
 		listNoMurdered,
@@ -61,6 +64,41 @@ let genereAssesinMurder = () => {
 };
 
 let oportunities = [false, false, false];
+
+//generate numer randoms
+let getNumberRandom = (num) => Math.round(Math.random() * num);
+
+//generate list of character to ask
+
+let getArrayCharacters = () => {
+	let arrCharacter = getNumberRandom(826);
+
+	for (let i = 0; i < 10; i++) {
+		arrCharacter = arrCharacter + "," + getNumberRandom(826);
+	}
+
+	return arrCharacter;
+};
+
+let nun_pet = 0;
+
+//get characters api of rick and morthy
+
+let getCharacters = (arrayCharacters) => {
+	console.log("arrayCharacters", arrayCharacters);
+
+	nun_pet = nun_pet + 1;
+
+	console.log("peticiona", nun_pet);
+
+	fetch(`https://rickandmortyapi.com/api/character/${arrayCharacters}`)
+		.then((response) => response.json())
+		// .then((data) => console.log(data));
+		.then((data) => (obj = data))
+		// .then((data) => console.log(obj));
+		.then((obj) => localStorage.setItem("suspectsArray", JSON.stringify(obj)));
+	// .then((obj) => JSON.parse(localStorage.getItem("suspectsArray", obj)));
+};
 
 //initialize all variables
 
@@ -86,8 +124,9 @@ let initElements = () => {
 };
 
 let crossListSuspect = (idSuspect) => {
-	// console.log("idSuspect--------->", idSuspect);
+	console.log("id____Suspect--------->", idSuspect);
 	id_suspect = idSuspect;
+	console.log("id____Suspect--------->", id_suspect);
 	suspect_list = document.getElementById(`list-suspect-${id_suspect}`);
 	console.log("suspect_list", suspect_list);
 	suspect_list.classList = "cross-text";
@@ -109,6 +148,8 @@ let crossListRoom = (idRoom) => {
 };
 
 let generateListSuspects = (arrSuspects) => {
+	// console.log("suspectsArray casi todo", arrSuspects);
+
 	containerListSuspects.innerHTML = "";
 
 	arrSuspects.forEach((character) => {
@@ -139,8 +180,19 @@ let generateListRooms = (arrRooms) => {
 };
 
 //Verify who is the killer
-let checkAssasin = (asseMurder, idSuspect) => {
+let checkAssasin = (asseMurder, id_suspect) => {
 	let arrWitMurd = [...asseMurder];
+	let suspectsArray = JSON.parse(localStorage.getItem("suspectsArray"));
+
+	console.log("suspectsArray checandp", suspectsArray);
+
+	posible_assasin = suspectsArray.find(({ id }) => id === id_suspect);
+
+	idSuspect = posible_assasin.id;
+	nameSuspect = posible_assasin.name;
+	imageSuspect = posible_assasin.image;
+
+	console.log("idSuspect elemento", idSuspect);
 
 	num_hearts = parseInt(localStorage.getItem("num_hearts"));
 	id_assasin_mistery = parseInt(localStorage.getItem("id_assasin"));
@@ -161,11 +213,7 @@ let checkAssasin = (asseMurder, idSuspect) => {
 			crossListSuspect(idSuspect);
 
 			playSound("lose");
-			swatSuspectFail(
-				(suspect = suspectsArray[idSuspect].name),
-				(name_image = suspectsArray[idSuspect].name_image),
-				"error"
-			);
+			swatSuspectFail(nameSuspect, imageSuspect);
 		} else if (id_assasin_mistery === idSuspect) {
 			playSound("win");
 
@@ -263,7 +311,7 @@ let checkWeapons = (arrayWeapons, idWeapon) => {
 			crossListWeapon(idWeapon);
 
 			playSound("lose");
-			swatWeaponsFail(weaponsArray[idWeapon], "error");
+			swatWeaponsFail(weaponsid_suspectArray[idWeapon], "error");
 		} else if (id_weapon_mistery == idWeapon) {
 			// playSound("win");
 			showWeapon();
@@ -385,7 +433,7 @@ let paintingCharacters = (arrSuspects) => {
 		column.innerHTML = `
 			<a href="#" id="btn-possAssesin-${character.id}" " > 
 				<div class="cardz">		
-					<img src="./characters/${character.name_image}.png" id="imgId-${character.id}" class="rounded"  style="width:100%" >
+					<img src=" ${character.image}" id="imgId-${character.id}" class="rounded"  style="width:100%" >
 					<div class="container">			
 						<p class="cardz-title ">${character.name}</p>
 					</div>
@@ -473,9 +521,13 @@ let genereMistery = (arrayWithoutMurdered, numPersonMurdered) => {
 };
 
 //Put te mistery and said who died
-let paintCase = (id_murder) =>
-	(person_murder.innerHTML = `Mataron a <span> ${suspectsArray[id_murder].name} </span> tienes que adivinar quién fue, con qué lo mataron y donde lo mató`);
+let paintCase = (id_murder, suspectsArray) => {
+	console.log("id_murder, suspectsArray", id_murder);
 
+	person_died = suspectsArray.find(({ id }) => id === id_murder);
+
+	person_murder.innerHTML = `Mataron a <span> ${person_died.name} </span> tienes que adivinar quién fue, con qué lo mataron y donde lo mató`;
+};
 //painting hearts
 
 let paintHearts = (num_hearts) => {
@@ -577,11 +629,18 @@ let paintingScore = () => {
 let score = 12000;
 
 let main = () => {
+	// console.log(localStorage.getItem("suspectsArray"));
+
+	const suspectsArray = JSON.parse(localStorage.getItem("suspectsArray"));
+
+	console.log("suspectsArray-->", suspectsArray);
+
 	//Stores elements in variables
 	initElements();
 
 	//Generate name person murder and array without person murdered
-	[arrayWithoutMurdered, numPersonMurdered] = genereAssesinMurder();
+	[arrayWithoutMurdered, numPersonMurdered] =
+		genereAssesinMurder(suspectsArray);
 
 	//Generete suspects, weapons and rooms
 	generateListSuspects(arrayWithoutMurdered);
@@ -589,7 +648,7 @@ let main = () => {
 	generateListRooms(roomsArray);
 
 	//paints suspects, weapons and rooms in the dom
-	paintCase(numPersonMurdered);
+	paintCase(numPersonMurdered, suspectsArray);
 	paintingCharacters(arrayWithoutMurdered);
 	paintingWeapons(weaponsArray);
 	paintingRooms(roomsArray);
@@ -601,4 +660,12 @@ let main = () => {
 	genereMistery(arrayWithoutMurdered, numPersonMurdered);
 };
 
-main();
+localStorage.clear();
+
+getCharacters(getArrayCharacters());
+
+function sayHi() {
+	main();
+}
+
+setTimeout(sayHi, 3000);
