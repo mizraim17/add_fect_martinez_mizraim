@@ -1,0 +1,196 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;900&display=swap");
+
+* {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+ul {
+	padding-left: 0;
+}
+
+a:link,
+a:visited,
+a:active {
+	text-decoration: none;
+	color: white;
+}
+
+// variables
+
+$gray: #323643;
+$gray-2: #606470;
+$green: #8de0a6;
+$rose: #f27c7c;
+$rose-2: #f56d8f;
+$blue: #6bacbf;
+
+body {
+	background: $gray;
+}
+
+.blur-image {
+	filter: blur(11px);
+}
+
+.colum-list-suspects {
+	background-color: $gray-2;
+	padding: 2%;
+}
+
+.base-list {
+	color: white;
+	font-weight: 500;
+	font-style: italic;
+}
+
+.list-weapons,
+.list-suspects,
+.list-rooms {
+	@extend .base-list;
+}
+
+.margin-5 {
+	margin-top: 2%;
+}
+.tit-list-suspects,
+.tit-list-weapons,
+.tit-list-rooms {
+	padding-top: 8%;
+	color: $green;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.tit-points,
+.tit-weapon {
+	color: $rose;
+	font-size: 22px;
+	font-weight: bold;
+}
+
+#name_suspect,
+#name_weapon,
+#name_rooms {
+	font-size: 18px;
+	font-weight: 500;
+}
+
+.name_correct {
+	color: #faffa8;
+	padding: 2%;
+	background-color: rgba(240, 240, 240, 0.1);
+
+	span {
+		font-style: italic;
+	}
+}
+
+.name_incorrect {
+	color: $rose-2;
+	padding: 2%;
+
+	span {
+		font-style: italic;
+	}
+}
+
+#person_murder {
+	text-shadow: 1px 1px 2px black;
+	color: $blue;
+	font-size: 24px;
+	font-weight: bold;
+
+	span {
+		color: $rose;
+	}
+}
+
+.cardz {
+	background-color: $rose;
+	box-shadow: 0 4px 8px 0 rgba(120, 72, 72, 0.2);
+	transition: 0.3s;
+	width: 80%;
+	border-radius: 15px;
+	height: 244px;
+	width: 139px;
+}
+
+.cardz-weapons {
+	@extend .cardz;
+	background-color: $blue;
+}
+
+.cardz-rooms {
+	@extend .cardz;
+	background-color: $green;
+}
+
+.cardz-title {
+	font-weight: bold;
+	text-decoration: none;
+	color: white;
+	text-align: center;
+}
+
+.cardz:hover {
+	box-shadow: 0 8px 16px 0 rgba(255, 255, 255, 0.75);
+}
+
+.container {
+	padding: 2px 16px;
+}
+
+.tit-all-characters {
+	color: $rose-2;
+	text-align: center;
+	font-weight: 900;
+	font-size: 42px;
+}
+
+.cross-text {
+	text-decoration: line-through;
+}
+
+.fa-solid {
+	color: $rose-2 !important;
+	padding-right: 4px;
+}
+
+#container-score {
+	@extend .tit-points;
+	color: yellow;
+}
+
+.swa-text {
+	font-size: 22px;
+	font-weight: normal;
+	color: #f56d8f;
+
+	span {
+		color: gold;
+		font-size: 24px;
+		font-style: italic;
+		font-weight: bold;
+	}
+
+	span:nth-child(1) {
+		color: tomato;
+	}
+}
+
+.txt-fail {
+	font-size: 22px;
+	font-weight: normal;
+	color: #f56d8f;
+	span {
+		font-weight: 24px;
+		color: tomato;
+		font-weight: bold;
+
+		:nth-child(2) {
+			color: gold;
+		}
+	}
+}
