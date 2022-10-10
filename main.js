@@ -96,8 +96,8 @@ let getCharacters = (arrayCharacters) => {
 		// .then((data) => console.log(data));
 		.then((data) => (obj = data))
 		// .then((data) => console.log(obj));
-		.then((obj) => localStorage.setItem("suspectsArray", JSON.stringify(obj)));
-	// .then((obj) => JSON.parse(localStorage.getItem("suspectsArray", obj)));
+		.then((obj) => localStorage.setItem("suspectsArray", JSON.stringify(obj)))
+		.then(() => main());
 };
 
 //initialize all variables
@@ -124,11 +124,11 @@ let initElements = () => {
 };
 
 let crossListSuspect = (idSuspect) => {
-	console.log("id____Suspect--------->", idSuspect);
+	// console.log("id____Suspect--------->", idSuspect);
 	id_suspect = idSuspect;
-	console.log("id____Suspect--------->", id_suspect);
+	// console.log("id____Suspect--------->", id_suspect);
 	suspect_list = document.getElementById(`list-suspect-${id_suspect}`);
-	console.log("suspect_list", suspect_list);
+	// console.log("suspect_list", suspect_list);
 	suspect_list.classList = "cross-text";
 };
 
@@ -186,55 +186,58 @@ let checkAssasin = (asseMurder, id_suspect) => {
 
 	console.log("suspectsArray checandp", suspectsArray);
 
+	//get data possible assasin choose by user
 	posible_assasin = suspectsArray.find(({ id }) => id === id_suspect);
-
-	idSuspect = posible_assasin.id;
-	nameSuspect = posible_assasin.name;
-	imageSuspect = posible_assasin.image;
-
-	console.log("idSuspect elemento", idSuspect);
 
 	num_hearts = parseInt(localStorage.getItem("num_hearts"));
 	id_assasin_mistery = parseInt(localStorage.getItem("id_assasin"));
 
-	// console.log("id_assasin real", id_assasin_mistery);
+	real_assasin = suspectsArray.find(({ id }) => id === id_assasin_mistery);
+
+	console.log("id_assasin real", id_assasin_mistery);
+	console.log("real_assasin real", real_assasin);
 	// console.log("id_assasin", idSuspect);
 	// console.log("num_hearts checkAssasin", num_hearts);
 
 	if (num_hearts != 0) {
-		if (id_assasin_mistery !== idSuspect) {
-			arrWitMurd = arrWitMurd.filter((item) => item.id !== idSuspect);
+		if (id_assasin_mistery !== posible_assasin.id) {
+			// console.log("idSuspect elemento", idSuspect);
+
+			arrWitMurd = arrWitMurd.filter((item) => item.id !== posible_assasin.id);
 
 			num_hearts--;
 			localStorage.setItem("num_hearts", num_hearts);
 
 			paintHearts(num_hearts);
 			paintingCharacters(arrWitMurd);
-			crossListSuspect(idSuspect);
+			crossListSuspect(posible_assasin.id);
 
 			playSound("lose");
-			swatSuspectFail(nameSuspect, imageSuspect);
-		} else if (id_assasin_mistery === idSuspect) {
+
+			swatSuspectFail(posible_assasin, real_assasin);
+		} else if (id_assasin_mistery === posible_assasin.id) {
 			playSound("win");
 
 			showAssasin();
 		}
 	} else if (num_hearts == 0) {
-		showLoseAssasin(id_assasin_mistery);
+		showLoseAssasin(posible_assasin, real_assasin);
 	}
 };
 
 let rebootGame = () => {
+	getCharacters(getArrayCharacters());
 	localStorage.clear();
-	main();
 };
 
-let showLoseAssasin = (id_assasin) => {
+let showLoseAssasin = (real_assasin) => {
 	score = localStorage.getItem("score");
 
+	console.log("real_assasin", real_assasin);
+
 	Swal.fire({
-		imageUrl: `./characters/${suspectsArray[id_assasin].name_image}.png`,
-		html: `<p class="swa-text">Perdiste el asesino era <span> ${suspectsArray[id_assasin].name} </span> <br> tu puntajes fue de <span> ${score} </span> </p>`,
+		imageUrl: `${real_assasin.image}`,
+		html: `<p class="swa-text">Perdiste el asesino era <span> ${real_assasin.name} </span> <br> tu puntajes fue de <span> ${score} </span> </p>`,
 		position: "center",
 		showCancelButton: true,
 		confirmButtonText: "Jugar nuevamente",
@@ -313,7 +316,7 @@ let checkWeapons = (arrayWeapons, idWeapon) => {
 			playSound("lose");
 			swatWeaponsFail(weaponsid_suspectArray[idWeapon], "error");
 		} else if (id_weapon_mistery == idWeapon) {
-			// playSound("win");
+			playSound("win");
 			showWeapon();
 		}
 	} else if (num_hearts == 0) {
@@ -502,19 +505,20 @@ let paintingRooms = (arrRooms) => {
 
 //Generete Murder, weapon and room where the person died
 let genereMistery = (arrayWithoutMurdered, numPersonMurdered) => {
-	// console.log("-------------->", arrayWithoutMurdered);
-	// console.log("-------------->", arrayWithoutMurdered);
+	let arrayIdsWithoutMurdered = arrayWithoutMurdered.map(
+		(element) => element.id
+	);
 
-	let numAssesin = parseInt(doRandom(arrayWithoutMurdered));
+	numAssesin = parseInt(doRandom(arrayIdsWithoutMurdered));
 
-	numAssesin == arrayWithoutMurdered
-		? (numAssesin = parseInt(doRandom(arrayWithoutMurdered)))
-		: console.log(" ");
+	// numAssesin == arrayWithoutMurdered
+	// 	? (numAssesin = parseInt(doRandom(arrayWithoutMurdered)))
+	// 	: console.log(" ");
 
 	let numWeapon = parseInt(doRandom(weaponsArray));
 	let numRoom = parseInt(doRandom(roomsArray));
 
-	localStorage.setItem("id_assasin", numAssesin);
+	localStorage.setItem("id_assasin", arrayIdsWithoutMurdered[numAssesin]);
 	localStorage.setItem("id_died", numPersonMurdered);
 	localStorage.setItem("id_weapon", numWeapon);
 	localStorage.setItem("id_room", numRoom);
@@ -547,17 +551,17 @@ let playSound = (win_lose) => {
 	let sound = new Audio();
 
 	win_lose == "lose"
-		? (sound.src = "./sounds/risaZ.mp3")
-		: (sound.src = "./sounds/aplausoZ.mp3");
+		? (sound.src = "./sounds/risa.mp3")
+		: (sound.src = "./sounds/aplauso.mp3");
 
 	sound.play();
 };
 
-let swatSuspectFail = (suspect, suspect_name) => {
+let swatSuspectFail = (posible_assasin, real_assasin) => {
 	Swal.fire({
 		toast: true,
-		imageUrl: `./characters/${suspect_name}_cross.png`,
-		html: `<p class="txt-fail"> Fallaste, el asesino no es <span> ${suspect} </span> </p>`,
+		imageUrl: ` ${posible_assasin.image}`,
+		html: `<p class="txt-fail"> Fallaste, el asesino no es <span> ${posible_assasin.name} </span> </p>`,
 		position: "center",
 		showConfirmButton: false,
 		timer: 1500,
@@ -567,7 +571,7 @@ let swatSuspectFail = (suspect, suspect_name) => {
 	checkScore();
 
 	num_hearts == 0
-		? showLoseAssasin(id_assasin_mistery)
+		? showLoseAssasin(real_assasin)
 		: console.log(" no es 0--------------");
 };
 
@@ -633,7 +637,7 @@ let main = () => {
 
 	const suspectsArray = JSON.parse(localStorage.getItem("suspectsArray"));
 
-	console.log("suspectsArray-->", suspectsArray);
+	// console.log("suspectsArray-->", suspectsArray);
 
 	//Stores elements in variables
 	initElements();
@@ -663,9 +667,3 @@ let main = () => {
 localStorage.clear();
 
 getCharacters(getArrayCharacters());
-
-function sayHi() {
-	main();
-}
-
-setTimeout(sayHi, 3000);
