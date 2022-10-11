@@ -194,3 +194,7 @@ body {
 		}
 	}
 }
+
+.txt-winner {
+	@extend .txt-fail;
+}
