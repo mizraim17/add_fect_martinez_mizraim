@@ -139,3 +139,38 @@ body {
     font-weight: bold; }
     .txt-fail span :nth-child(2), .txt-winner span :nth-child(2) {
       color: gold; }
+
+.contain-loader {
+  display: flex;
+  justify-content: center;
+  z-index: 999;
+  position: absolute;
+  background-color: #323643;
+  height: 100vh;
+  width: 100vh; }
+
+.vanish-loader {
+  display: none; }
+
+.loader {
+  border: 36px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 36px solid #3498db;
+  width: calc(30vw);
+  height: calc(80vh);
+  -webkit-animation: spin 2s linear infinite;
+  /* Safari */
+  animation: spin 2s linear infinite; }
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg); } }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }

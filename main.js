@@ -91,6 +91,7 @@ let getCharacters = (arrayCharacters) => {
 		// .then((data) => console.log(obj));
 		.then((obj) => localStorage.setItem("suspectsArray", JSON.stringify(obj)))
 		.then(() => main());
+	// .then(() => manageLoader());
 };
 
 //initialize all variables
@@ -669,6 +670,12 @@ let paintingScore = () => {
 	newPoints = parseInt(localStorage.getItem("score"));
 
 	containerScore.innerHTML = `${newPoints}`;
+};
+
+let manageLoader = () => {
+	let container_loader = document.getElementById("container-loader");
+
+	container_loader.classList = "vanish-loader";
 };
 
 let score = 12000;
