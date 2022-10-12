@@ -611,7 +611,7 @@ let playSound = (win_lose) => {
 		? (sound.src = "./sounds/risa.mp3")
 		: (sound.src = "./sounds/aplauso.mp3");
 
-	// sound.play();
+	sound.play();
 };
 
 let swatSuspectFail = (posible_assasin, real_assasin) => {
