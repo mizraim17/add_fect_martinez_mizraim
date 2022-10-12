@@ -5,32 +5,28 @@
 let containerCharacters,
 	cardsTotalMistery = 0;
 
-const suspectsArray2 = [
-	{ id: 0, name: "Michael Scott", name_image: "michael" },
-	{ id: 1, name: "Jim Halpert", name_image: "jim" },
-	{ id: 2, name: "Dwight Schrute", name_image: "dwight" },
-	{ id: 3, name: "Pam Beesly", name_image: "pam" },
-	{ id: 4, name: "Ryan Howard", name_image: "ryan" },
-	{ id: 5, name: "Oscar Martinez", name_image: "oscar" },
-	{ id: 6, name: "Angela Martin", name_image: "angela" },
-	{ id: 7, name: "Andy Bernard", name_image: "andy" },
-	{ id: 8, name: "Kevin Malone", name_image: "kevin" },
-];
+class arraysGames {
+	constructor(id, name, name_image) {
+		this.id = id;
+		this.name = name;
+		this.name_image = name_image;
+	}
+}
 
 const roomsArray = [
-	{ id: 0, name: "Recepción", name_image: "recepcion" },
-	{ id: 1, name: "Oficina Michael", name_image: "ofi_michael" },
-	{ id: 2, name: "Zona de Parking", name_image: "estacionamiento" },
-	{ id: 3, name: "Bodega", name_image: "bodega" },
-	{ id: 4, name: "Sala de Juntas", name_image: "juntas" },
+	new arraysGames(0, "Recepción", "recepcion"),
+	new arraysGames(1, "Oficina Michael", "ofi_michael"),
+	new arraysGames(2, "Zona de Parking", "estacionamiento"),
+	new arraysGames(3, "Bodega", "bodega"),
+	new arraysGames(4, "Sala de Juntas", "juntas"),
 ];
 
 const weaponsArray = [
-	{ id: 0, name: "Olla", name_image: "olla" },
-	{ id: 1, name: "Limonada Mexicana", name_image: "limonada" },
-	{ id: 2, name: "Pistola", name_image: "pistola" },
-	{ id: 3, name: "Pistola de soldar", name_image: "soplete" },
-	{ id: 4, name: "Engrapadora en gelatina", name_image: "engrapadora" },
+	new arraysGames(0, "Olla", "olla"),
+	new arraysGames(1, "Limonada Mexicana", "limonada"),
+	new arraysGames(2, "Pistola", "pistola"),
+	new arraysGames(3, "Pistola de soldar", "soplete"),
+	new arraysGames(4, "Engrapadora en gelatina", "engrapadora"),
 ];
 
 //Function generate number random depending of size of array
@@ -84,6 +80,8 @@ let getArrayCharacters = () => {
 //get characters api of rick and morthy
 
 let getCharacters = (arrayCharacters) => {
+	console.log("entra y el arrayCharacters es", arrayCharacters);
+
 	fetch(`https://rickandmortyapi.com/api/character/${arrayCharacters}`)
 		.then((response) => response.json())
 		// .then((data) => console.log(data));
@@ -97,6 +95,8 @@ let getCharacters = (arrayCharacters) => {
 //initialize all variables
 
 let initElements = () => {
+	container_loader = document.getElementById("container-loader");
+
 	containerCharacters = document.getElementById("containerCharacters");
 	containerListSuspects = document.getElementById("containerListSuspects");
 	containerListWeapons = document.getElementById("containerListWeapons");
@@ -111,7 +111,7 @@ let initElements = () => {
 	person_murder = document.getElementById("person_murder");
 	container_hearts = document.getElementById("hearts");
 	containerScore = document.getElementById("container-score");
-	localStorage.setItem("num_hearts", 6);
+	localStorage.setItem("num_hearts", 3);
 	localStorage.setItem("score", 1200);
 
 	// console.log("num_hearts init", localStorage.getItem("num_hearts"));
@@ -194,8 +194,12 @@ let showSolutionMistery = () => {
 
 	Swal.fire({
 		imageUrl: ` ${name_assasin.image}`,
+		imageWidth: 300,
+		width: 300,
+		imageHeight: 300,
+		background: "#323643",
 		html: `<p class="txt-winner"> Felicidades, el asesino es <span> ${name_assasin.name} </span>,
-			mato a ${name_murdered.name} con la ${weaponsArray[id_weapon].name} en ${roomsArray[id_room].name}  </p>`,
+			mato a <span>${name_murdered.name} </span> con la <span>${weaponsArray[id_weapon].name}</span> en la <span>${roomsArray[id_room].name} </span> </p>`,
 		position: "center",
 		showCancelButton: true,
 		confirmButtonText: "Jugar nuevamente",
@@ -209,7 +213,11 @@ let showSolutionMistery = () => {
 };
 
 let rebootGame = () => {
+	// container_loader.classList = "loader show";
+	// console.log("container reboot", container_loader);
+	console.log("%c entro al reboot! ", " ; color: #bada55");
 	getCharacters(getArrayCharacters());
+
 	localStorage.clear();
 };
 
@@ -220,6 +228,10 @@ let showLoseAssasin = (real_assasin) => {
 
 	Swal.fire({
 		imageUrl: `${real_assasin.image}`,
+		imageWidth: 300,
+		width: 300,
+		imageHeight: 300,
+		background: "#323643",
 		html: `<p class="swa-text">Perdiste el asesino era <span> ${real_assasin.name} </span> <br> tu puntajes es de <span> ${score} </span> </p>`,
 		position: "center",
 		showCancelButton: true,
@@ -369,6 +381,7 @@ let checkRooms = (arrayRooms, idRoomPlayer) => {
 			playSound("lose");
 			swatRoomFail(roomsArray[idRoomPlayer], "error");
 		} else if (roomsArray[id_room_real].id == idRoomPlayer) {
+			playSound("win");
 			showRooms(id_room_real);
 		}
 	}
@@ -396,7 +409,7 @@ let showAssasin = (real_assasin, suspectsArray) => {
 		containerCharacters.append(column);
 		containerListSuspects.innerHTML = "";
 		let list = document.createElement("li");
-		list.innerHTML = `<p > ${real_assasin.id}.- ${real_assasin.name} \n </p> `;
+		list.innerHTML = `<p >   ${real_assasin.name} \n </p> `;
 		containerListSuspects.appendChild(list);
 	} else {
 		showSolutionMistery();
@@ -413,7 +426,7 @@ let showWeapon = () => {
 		id_weapon = localStorage.getItem("id_weapon");
 		containerWeapons.innerHTML = "";
 
-		column.className = "col-md-3 mt-3";
+		column.className = "col-6 col-md-3 mt-3";
 		column.id = `weapon-${weaponsArray[id_weapon].id}`;
 		column.innerHTML = `
 	<div class="card card-special bg-success text-white">
@@ -466,6 +479,8 @@ let showRooms = () => {
 };
 
 let paintingCharacters = (arrSuspects) => {
+	// console.log("arrSuspects", arrSuspects);
+
 	containerCharacters.innerHTML = "";
 	num_hearts = parseInt(localStorage.getItem("num_hearts"));
 
@@ -572,7 +587,7 @@ let paintCase = (id_murder, suspectsArray) => {
 	// console.log("id_murder, suspectsArray", id_murder);
 
 	person_died = suspectsArray.find(({ id }) => id === id_murder);
-	person_murder.innerHTML = `Mataron a <span> ${person_died.name} </span> tienes que adivinar quién fue, con qué lo mataron y donde lo mató`;
+	person_murder.innerHTML = `Mataron a <span> ${person_died.name} </span> tienes que adivinar quién fue, con qué lo mato y donde lo mató`;
 };
 //painting hearts
 
@@ -603,11 +618,15 @@ let swatSuspectFail = (posible_assasin, real_assasin) => {
 	Swal.fire({
 		toast: true,
 		imageUrl: ` ${posible_assasin.image}`,
+		imageWidth: 300,
+		width: 300,
+		imageHeight: 300,
+		background: "#323643",
 		html: `<p class="txt-fail"> Fallaste, el asesino no es <span> ${posible_assasin.name} </span> </p>`,
 		position: "center",
 		showConfirmButton: false,
-		timer: 1500,
 		timerProgressBar: true,
+		timer: 1500,
 	});
 
 	checkScore();
@@ -624,6 +643,10 @@ let swatWeaponsFail = (weaponsArray) => {
 	Swal.fire({
 		toast: true,
 		imageUrl: `./weapons/${name_image}_cross.png`,
+		imageWidth: 300,
+		width: 300,
+		imageHeight: 300,
+		background: "#323643",
 		html: `<p class="txt-fail"> Fallaste, el arma no es la <span> ${name} </span> </p>`,
 		position: "center",
 		showConfirmButton: false,
@@ -645,6 +668,9 @@ let swatRoomFail = (roomsArray) => {
 	Swal.fire({
 		toast: true,
 		imageUrl: `./rooms/${name_image}_cross.png`,
+		width: 300,
+		imageHeight: 300,
+		background: "#323643",
 		html: `<p class="txt-fail"> Fallaste, el lugar no es la <span> ${name} </span> </p>`,
 		position: "center",
 		showConfirmButton: false,
@@ -673,9 +699,11 @@ let paintingScore = () => {
 };
 
 let manageLoader = () => {
-	let container_loader = document.getElementById("container-loader");
+	container_loader = document.getElementById("container-loader");
 
+	console.log("remove antes", container_loader);
 	container_loader.remove("show");
+	console.log("remove despues", container_loader);
 };
 
 let score = 12000;

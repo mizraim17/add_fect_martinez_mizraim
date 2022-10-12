@@ -197,6 +197,21 @@ body {
 
 .txt-winner {
 	@extend .txt-fail;
+	color: $green;
+	span {
+		color: $rose-2;
+		:nth-child(2) {
+			color: $rose-2;
+		}
+	}
+}
+
+img.swal2-image {
+	margin: 0;
+}
+
+div.swal2-popup.swal2-toast {
+	padding: 0;
 }
 
 .loading {
@@ -213,7 +228,7 @@ body {
 	transition: 1s all;
 	opacity: 0;
 }
-.loading.show {
+.loading .show {
 	opacity: 1;
 }
 .loading .spin {
