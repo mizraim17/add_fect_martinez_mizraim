@@ -90,8 +90,8 @@ let getCharacters = (arrayCharacters) => {
 		.then((data) => (obj = data))
 		// .then((data) => console.log(obj));
 		.then((obj) => localStorage.setItem("suspectsArray", JSON.stringify(obj)))
-		.then(() => main());
-	// .then(() => manageLoader());
+		.then(() => main())
+		.then(() => manageLoader());
 };
 
 //initialize all variables
@@ -675,7 +675,7 @@ let paintingScore = () => {
 let manageLoader = () => {
 	let container_loader = document.getElementById("container-loader");
 
-	container_loader.classList = "vanish-loader";
+	container_loader.remove("show");
 };
 
 let score = 12000;
