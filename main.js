@@ -395,16 +395,23 @@ let showAssasin = (real_assasin, suspectsArray) => {
 		let column = document.createElement("div");
 		containerCharacters.innerHTML = "";
 
-		column.className = "col-6  col-md-3  mt-3";
+		column.className = "col-12  col-md-6  mt-3";
 		column.id = `character-${real_assasin.id}`;
 		column.innerHTML = `
-	<div class="card card-special bg-success text-white"  >
-  	<img src="${real_assasin.image}" id="imgId-${real_assasin.id}" class="card-img-top " alt="...">
-  	<div class="card-body">
-    	<pclass="cardz-title">${real_assasin.name}</p>
-    	<a href="#" id="btn-possAssesin-${real_assasin.id}" class="btn btn-danger text-white">Asesino Encontrado</a>
-  	</div>
-	</div>`;
+
+		<div class="card text-bg-dark mb-3" style="max-width: 640px;">
+  		<div class="row g-0">
+				<div class="col-md-4">
+					<img src="${real_assasin.image}" id="imgId-${real_assasin.id}" class="card-img-top " alt="...">
+				</div>
+				<div class="col-md-8">
+					<div class="card-body">
+					<p class="cardz-text">Felicidades si fue <span> ${real_assasin.name} </span>el asesino</p>
+				</div>
+					</div>
+  		</div>
+		</div>
+		`
 
 		containerCharacters.append(column);
 		containerListSuspects.innerHTML = "";
@@ -426,16 +433,22 @@ let showWeapon = () => {
 		id_weapon = localStorage.getItem("id_weapon");
 		containerWeapons.innerHTML = "";
 
-		column.className = "col-6 col-md-3 mt-3";
+		column.className = "col-12 col-md-6 col-lg-6 mt-3";
 		column.id = `weapon-${weaponsArray[id_weapon].id}`;
 		column.innerHTML = `
-	<div class="card card-special bg-success text-white">
-		<img src="./weapons/${weaponsArray[id_weapon].name_image}.png" id="imgId-${weaponsArray[id_weapon].id}" class="card-img-top " alt="...">
-		<div class="card-body">
-			<p class="card-title">${weaponsArray[id_weapon].name}</p>
-			<a href="#" id="btn-poss-weapon-${weaponsArray[id_weapon].id}" class="btn btn-primary">Arma encontrada</a>
+		<div class="card text-bg-dark mb-3" style="max-width: 640px;">
+  		<div class="row g-0">
+				<div class="col-md-4">
+					<img src="./weapons/${weaponsArray[id_weapon].name_image}.png" id="imgId-${weaponsArray[id_weapon].id}" class="card-img-top " alt="...">
+				</div>
+				<div class="col-md-8">
+					<div class="card-body">
+					<p class="cardz-text">Felicidades si lo mataron con la <span> ${weaponsArray[id_weapon].name} </span></p>
+				</div>
+					</div>
+  		</div>
 		</div>
-	</div>`;
+		`
 
 		containerWeapons.append(column);
 		containerListWeapons.innerHTML = "";
@@ -457,16 +470,23 @@ let showRooms = () => {
 		id_room = localStorage.getItem("id_room");
 		containerRooms.innerHTML = "";
 
-		column.className = "col-md-3 mt-3";
+		column.className = "col-12 col-md-8 col-lg-6 mt-3";
 		column.id = `weapon-${roomsArray[id_room].id}`;
 		column.innerHTML = `
-	<div class="card bg-success">
-  	<img src="./rooms/${roomsArray[id_room].name_image}.png" id="imgId-${roomsArray[id_room].id}" class="card-img-top " alt="...">
-	 	<div class="container">
-    	<p class="card-title text-white">${roomsArray[id_room].name}</p>  
-			<a href="#" id="btn-poss-weapon-${roomsArray[id_room].id}" class="btn btn-primary">Lugar  encontrada</a> 
-  	</div>
-	</div>`;
+
+		<div class="card text-bg-dark mb-3" style="max-width: 640px;">
+  		<div class="row g-0">
+				<div class="col-md-4">
+					<img src="./rooms/${roomsArray[id_room].name_image}.png" id="imgId-${roomsArray[id_room].id}" class="card-img-top " alt="...">
+	 			</div>
+				<div class="col-md-8">
+					<div class="card-body">
+					<p class="cardz-text">Felicidades si lo mataron con la <span> ${roomsArray[id_room].name} </span></p>
+				</div>
+			</div>
+  		</div>
+		</div>
+		`;
 
 		containerRooms.append(column);
 		containerListRooms.innerHTML = "";
