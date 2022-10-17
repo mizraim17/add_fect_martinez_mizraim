@@ -54,6 +54,7 @@ body {
 .margin-5 {
 	margin-top: 2%;
 }
+
 .tit-list-suspects,
 .tit-list-weapons,
 .tit-list-rooms {
@@ -138,6 +139,15 @@ body {
 	box-shadow: 0 8px 16px 0 rgba(255, 255, 255, 0.75);
 }
 
+.cardz-text {
+	@extend .txt-fail;
+	color: $green  !important;
+
+	span {
+		color: white;
+	}
+}
+
 .container {
 	padding: 2px 16px;
 }
@@ -154,7 +164,7 @@ body {
 }
 
 .fa-solid {
-	color: $rose-2 !important;
+	color: $rose-2  !important;
 	padding-right: 4px;
 }
 
@@ -184,6 +194,7 @@ body {
 	font-size: 22px;
 	font-weight: normal;
 	color: #f56d8f;
+
 	span {
 		font-weight: 24px;
 		color: tomato;
@@ -198,8 +209,10 @@ body {
 .txt-winner {
 	@extend .txt-fail;
 	color: $green;
+
 	span {
 		color: $rose-2;
+
 		:nth-child(2) {
 			color: $rose-2;
 		}
@@ -228,9 +241,11 @@ div.swal2-popup.swal2-toast {
 	transition: 1s all;
 	opacity: 0;
 }
+
 .loading .show {
 	opacity: 1;
 }
+
 .loading .spin {
 	border: 3px solid hsla(185, 100%, 62%, 0.2);
 	border-top-color: #3cefff;
@@ -239,6 +254,7 @@ div.swal2-popup.swal2-toast {
 	height: 3em;
 	animation: spin 1s linear infinite;
 }
+
 @keyframes spin {
 	to {
 		transform: rotate(360deg);
